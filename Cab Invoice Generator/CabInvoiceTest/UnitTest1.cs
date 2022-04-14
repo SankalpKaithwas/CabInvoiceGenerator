@@ -50,7 +50,7 @@ namespace CabInvoiceTest
         }
 
         /// <summary>
-        /// UC2 Calculate faRE FOR Multiple ride
+        /// UC2 Calculate fare FOR Multiple ride
         /// </summary>
         [Test]
         public void GiveDistanceAndTIme_CalcualteFareMultipleRide()
@@ -105,6 +105,63 @@ namespace CabInvoiceTest
             {
                 Assert.AreEqual("Time should be greater than One Minutes", exception.Message);
             }
+        }
+        /// <summary>
+        /// TC 2.3 Invalid Distance And Time
+        /// </summary>
+        [Test]
+        public void GiveInvalidDistanceAndTime_CalcualteFareMultipleRide()
+        {
+            Ride rideOne = new Ride(4, 0);
+            Ride rideTwo = new Ride(2, 0);
+            List<Ride> rides = new List<Ride>();
+            rides.Add(rideOne);
+            rides.Add(rideTwo);
+            int calFare;
+            try
+            {
+                calFare = fare.CalculateFareForMultipleRide(rides);
+            }
+            catch (CustomException exception)
+            {
+                Assert.AreEqual("Invalid Distance and Time", exception.Message);
+            }
+        }
+
+        
+        /// <summary>
+        /// UC 3 TC 3.1 Give average cost of ride
+        /// </summary>
+        [Test]
+        public void GiveDistanceAndTime_CalcualteAverage_FareFor_MultipleRide()
+        {
+            Ride rideOne = new Ride(6, 4);
+            Ride rideTwo = new Ride(5, 6);
+            Ride rideThree = new Ride(5, 6);
+            List<Ride> rides = new List<Ride>();
+            rides.Add(rideOne);
+            rides.Add(rideTwo);
+            rides.Add(rideThree);
+            fare.CalculateFareForMultipleRide(rides);
+            int avergareFair = fare.averageCostOfRide;
+            Assert.AreEqual(58, avergareFair);
+        }
+
+        /// <summary>
+        /// UC 3 TC 3.2 Give total number of Rides
+        /// </summary>
+        [Test]
+        public void GiveDistanceAndTime_CalcualteNumberOfRidesFor_MultipleRide()
+        {
+            Ride rideOne = new Ride(6, 4);
+            Ride rideTwo = new Ride(5, 6);
+            Ride rideThree = new Ride(5, 6);
+            List<Ride> rides = new List<Ride>();
+            rides.Add(rideOne);
+            rides.Add(rideTwo);
+            rides.Add(rideThree);
+            fare.CalculateFareForMultipleRide(rides);
+            Assert.AreEqual(3, fare.numberOfRides);
         }
     }
 }

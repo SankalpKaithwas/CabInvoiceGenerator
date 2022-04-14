@@ -22,7 +22,11 @@ namespace Cab_Invoice_Generator
         }
         public int CalculateFaresForSingleRide(Ride ride)
         {
-            if (ride.time < 1)
+            if (ride.time < 1 && ride.distance < 5)
+            {
+                throw new CustomException(CustomException.Exceptions.InvalidDistanceAndTime, "Invalid Distance and Time");
+            }
+            else if (ride.time < 1)
             {
                 throw new CustomException(CustomException.Exceptions.TimeSmallerThaOneMin, "Time should be greater than One Minutes");
             }
@@ -30,6 +34,7 @@ namespace Cab_Invoice_Generator
             {
                 throw new CustomException(CustomException.Exceptions.DistanceSmallerThanFive, "Distance should be greater than or equal to Five Km");
             }
+
 
             int fare = ride.distance * rideChargePerKm + ride.time * pricePrMinute;
             return Math.Max(minimumFare, fare);
