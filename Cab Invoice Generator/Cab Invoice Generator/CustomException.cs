@@ -11,7 +11,8 @@ namespace Cab_Invoice_Generator
         {
             TimeSmallerThaOneMin,
             DistanceSmallerThanFive,
-            InvalidUserId
+            InvalidUserId,
+            InvalidDistanceAndTime
         }
         public CustomException(Exceptions type, string message) : base(message)
         {
