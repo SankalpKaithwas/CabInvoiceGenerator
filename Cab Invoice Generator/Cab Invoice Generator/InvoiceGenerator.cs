@@ -34,8 +34,6 @@ namespace Cab_Invoice_Generator
             {
                 throw new CustomException(CustomException.Exceptions.DistanceSmallerThanFive, "Distance should be greater than or equal to Five Km");
             }
-
-
             int fare = ride.distance * rideChargePerKm + ride.time * pricePrMinute;
             return Math.Max(minimumFare, fare);
         }
@@ -50,5 +48,6 @@ namespace Cab_Invoice_Generator
             averageCostOfRide = totalFare / numberOfRides;
             return totalFare;
         }
+
     }
 }

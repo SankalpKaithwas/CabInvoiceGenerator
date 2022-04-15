@@ -7,10 +7,12 @@ namespace CabInvoiceTest
     public class Tests
     {
         InvoiceGenerator fare;
+        RideRepository rideRepository;
         [SetUp]
         public void Setup()
         {
             fare = new InvoiceGenerator();
+            rideRepository = new RideRepository();
         }
         /// <summary>
         /// UC1 Fare for single ride
@@ -128,7 +130,7 @@ namespace CabInvoiceTest
             }
         }
 
-        
+
         /// <summary>
         /// UC 3 TC 3.1 Give average cost of ride
         /// </summary>
@@ -162,6 +164,43 @@ namespace CabInvoiceTest
             rides.Add(rideThree);
             fare.CalculateFareForMultipleRide(rides);
             Assert.AreEqual(3, fare.numberOfRides);
+        }
+
+        /// <summary>
+        /// UC 4 TC 4.1 Valid Invoice for user
+        /// </summary>
+        [Test]
+        public void GivenValidUserIdGenerateCabInvoice()
+        {
+            Ride rideOne = new Ride(5, 7);
+            Ride rideTwo = new Ride(6, 10);
+            Ride rideThree = new Ride(6, 23);
+            rideRepository.AddRide("Sankalp", rideOne);
+            rideRepository.AddRide("Sankalp", rideTwo);
+            rideRepository.AddRide("Sankalp", rideThree);
+            //Fare for multiple ride but give list of rides for a perticular rider(User) and then pass to Calculate fare
+            Assert.AreEqual(210, fare.CalculateFareForMultipleRide(rideRepository.GetListOfRides("Sankalp")));
+        }
+        /// <summary>
+        /// TC 4.2 Invalid user id throw custom exception
+        /// </summary>
+        [Test]
+        public void GivenInValidUserIdGenerateCabInvoice()
+        {
+            try
+            {
+                Ride rideOne = new Ride(5, 7);
+                Ride rideTwo = new Ride(6, 10);
+                Ride rideThree = new Ride(6, 23);
+                rideRepository.AddRide("Sankalp", rideOne);
+                rideRepository.AddRide("Sankalp", rideTwo);
+                rideRepository.AddRide("Sankalp", rideThree);
+            }
+            catch (CustomException)
+            {
+                //Fare for multiple ride but give list of rides for a perticular rider(User) and then pass to Calculate fare
+                Assert.AreEqual("Invalid User ID", fare.CalculateFareForMultipleRide(rideRepository.GetListOfRides("Kaithwas")));
+            }
         }
     }
 }
