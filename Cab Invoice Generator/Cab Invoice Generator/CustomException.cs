@@ -6,15 +6,16 @@ namespace Cab_Invoice_Generator
 {
     public class CustomException : Exception
     {
-        public Exceptions type;
-        public enum Exceptions
+        public ExceptionType type;
+        public enum ExceptionType
         {
             TimeSmallerThaOneMin,
             DistanceSmallerThanFive,
             InvalidUserId,
-            InvalidDistanceAndTime
+            InvalidDistanceAndTime,
+            InvalidRideType
         }
-        public CustomException(Exceptions type, string message) : base(message)
+        public CustomException(ExceptionType type, string message) : base(message)
         {
             this.type = type;
         }

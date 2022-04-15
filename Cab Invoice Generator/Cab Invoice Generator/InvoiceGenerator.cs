@@ -14,25 +14,44 @@ namespace Cab_Invoice_Generator
         public int averageCostOfRide;
         public int numberOfRides;
         readonly int minimumFare;
+
         public InvoiceGenerator()
         {
-            rideChargePerKm = 10;
-            pricePrMinute = 1;
-            minimumFare = 5;
+
+        }
+
+        public InvoiceGenerator(RideType typeOfRide)
+        {
+            if (typeOfRide.Equals(RideType.NORMAL))
+            {
+                rideChargePerKm = 10;
+                pricePrMinute = 1;
+                minimumFare = 5;
+            }
+            else if (typeOfRide.Equals(RideType.PREMIUM))
+            {
+                rideChargePerKm = 15;
+                pricePrMinute = 2;
+                minimumFare = 20;
+            }
+            else 
+            {
+                throw new CustomException(CustomException.ExceptionType.InvalidRideType, "Invalid Ride type");
+            }
         }
         public int CalculateFaresForSingleRide(Ride ride)
         {
             if (ride.time < 1 && ride.distance < 5)
             {
-                throw new CustomException(CustomException.Exceptions.InvalidDistanceAndTime, "Invalid Distance and Time");
+                throw new CustomException(CustomException.ExceptionType.InvalidDistanceAndTime, "Invalid Distance and Time");
             }
             else if (ride.time < 1)
             {
-                throw new CustomException(CustomException.Exceptions.TimeSmallerThaOneMin, "Time should be greater than One Minutes");
+                throw new CustomException(CustomException.ExceptionType.TimeSmallerThaOneMin, "Time should be greater than One Minutes");
             }
             else if (ride.distance < 5)
             {
-                throw new CustomException(CustomException.Exceptions.DistanceSmallerThanFive, "Distance should be greater than or equal to Five Km");
+                throw new CustomException(CustomException.ExceptionType.DistanceSmallerThanFive, "Distance should be greater than or equal to Five Km");
             }
             int fare = ride.distance * rideChargePerKm + ride.time * pricePrMinute;
             return Math.Max(minimumFare, fare);
@@ -48,6 +67,5 @@ namespace Cab_Invoice_Generator
             averageCostOfRide = totalFare / numberOfRides;
             return totalFare;
         }
-
     }
 }

@@ -25,7 +25,7 @@ namespace Cab_Invoice_Generator
         {
             if (rideRepository.ContainsKey(userID))
                 return rideRepository[userID];
-            else throw new CustomException(CustomException.Exceptions.InvalidUserId, "Invalid User ID");
+            else throw new CustomException(CustomException.ExceptionType.InvalidUserId, "Invalid User ID");
         }
     }
 }

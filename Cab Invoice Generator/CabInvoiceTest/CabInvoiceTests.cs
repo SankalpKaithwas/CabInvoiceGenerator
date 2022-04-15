@@ -22,6 +22,8 @@ namespace CabInvoiceTest
         [TestCase(6, 4)]
         public void GiveDistanceAndTIme_CalcualteFare(int distance, int time)
         {
+            fare = new InvoiceGenerator(RideType.NORMAL);
+
             Ride ride = new Ride(distance, time);
             int calFare = fare.CalculateFaresForSingleRide(ride);
             Assert.AreEqual(64, calFare);
@@ -36,7 +38,7 @@ namespace CabInvoiceTest
         {
             Ride ride = new Ride(distance, time);
             CustomException exception = Assert.Throws<CustomException>(() => fare.CalculateFaresForSingleRide(ride));
-            Assert.AreEqual(exception.type, CustomException.Exceptions.DistanceSmallerThanFive);
+            Assert.AreEqual(exception.type, CustomException.ExceptionType.DistanceSmallerThanFive);
         }
         /// <summary>
         /// TC 1.2 Invalid time
@@ -48,7 +50,7 @@ namespace CabInvoiceTest
         {
             Ride ride = new Ride(distance, time);
             CustomException exception = Assert.Throws<CustomException>(() => fare.CalculateFaresForSingleRide(ride));
-            Assert.AreEqual(exception.type, CustomException.Exceptions.TimeSmallerThaOneMin);
+            Assert.AreEqual(exception.type, CustomException.ExceptionType.TimeSmallerThaOneMin);
         }
 
         /// <summary>
@@ -57,6 +59,8 @@ namespace CabInvoiceTest
         [Test]
         public void GiveDistanceAndTIme_CalcualteFareMultipleRide()
         {
+            fare = new InvoiceGenerator(RideType.NORMAL);
+
             Ride rideOne = new Ride(6, 4);
             Ride rideTwo = new Ride(5, 6);
             List<Ride> rides = new List<Ride>();
@@ -137,6 +141,7 @@ namespace CabInvoiceTest
         [Test]
         public void GiveDistanceAndTime_CalcualteAverage_FareFor_MultipleRide()
         {
+            fare = new InvoiceGenerator(RideType.NORMAL);
             Ride rideOne = new Ride(6, 4);
             Ride rideTwo = new Ride(5, 6);
             Ride rideThree = new Ride(5, 6);
@@ -155,6 +160,7 @@ namespace CabInvoiceTest
         [Test]
         public void GiveDistanceAndTime_CalcualteNumberOfRidesFor_MultipleRide()
         {
+            fare = new InvoiceGenerator(RideType.NORMAL);
             Ride rideOne = new Ride(6, 4);
             Ride rideTwo = new Ride(5, 6);
             Ride rideThree = new Ride(5, 6);
@@ -172,6 +178,7 @@ namespace CabInvoiceTest
         [Test]
         public void GivenValidUserIdGenerateCabInvoice()
         {
+            fare = new InvoiceGenerator(RideType.NORMAL);
             Ride rideOne = new Ride(5, 7);
             Ride rideTwo = new Ride(6, 10);
             Ride rideThree = new Ride(6, 23);
@@ -187,6 +194,7 @@ namespace CabInvoiceTest
         [Test]
         public void GivenInValidUserIdGenerateCabInvoice()
         {
+            fare = new InvoiceGenerator(RideType.NORMAL);
             try
             {
                 Ride rideOne = new Ride(5, 7);
@@ -200,6 +208,44 @@ namespace CabInvoiceTest
             {
                 //Fare for multiple ride but give list of rides for a perticular rider(User) and then pass to Calculate fare
                 Assert.AreEqual("Invalid User ID", fare.CalculateFareForMultipleRide(rideRepository.GetListOfRides("Kaithwas")));
+            }
+        }
+        /// <summary>
+        /// UC5 TC 5.1 Valid Ride type
+        /// </summary>
+        [Test]
+        public void GivenValidRideType_GenerateCabInvoice()
+        {
+            fare = new InvoiceGenerator(RideType.PREMIUM);
+            Ride rideOne = new Ride(5, 7);
+            Ride rideTwo = new Ride(6, 10);
+            Ride rideThree = new Ride(6, 23);
+            rideRepository.AddRide("Sankalp", rideOne);
+            rideRepository.AddRide("Sankalp", rideTwo);
+            rideRepository.AddRide("Sankalp", rideThree);
+
+            //Fare for multiple ride but give list of rides for a perticular rider(User) and then pass to Calculate fare
+            Assert.AreEqual(335, fare.CalculateFareForMultipleRide(rideRepository.GetListOfRides("Sankalp")));
+        }
+        /// <summary>
+        /// TC5.1 Invalid ride type
+        /// </summary>
+        [Test]
+        public void GivenInValidRideType_GenerateCabInvoice()
+        {
+            try
+            {
+                fare = new InvoiceGenerator();
+                Ride rideOne = new Ride(5, 7);
+                Ride rideTwo = new Ride(6, 10);
+                Ride rideThree = new Ride(6, 23);
+                rideRepository.AddRide("Sankalp", rideOne);
+                rideRepository.AddRide("Sankalp", rideTwo);
+                rideRepository.AddRide("Sankalp", rideThree);
+            }
+            catch (CustomException exception)
+            {
+                Assert.AreEqual("Invalid Ride type", exception.Message);
             }
         }
     }
