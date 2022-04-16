@@ -8,6 +8,7 @@ namespace CabInvoiceTest
     {
         InvoiceGenerator fare;
         RideRepository rideRepository;
+
         [SetUp]
         public void Setup()
         {
@@ -171,7 +172,7 @@ namespace CabInvoiceTest
             fare.CalculateFareForMultipleRide(rides);
             Assert.AreEqual(3, fare.numberOfRides);
         }
-
+      
         /// <summary>
         /// UC 4 TC 4.1 Valid Invoice for user
         /// </summary>
@@ -206,12 +207,12 @@ namespace CabInvoiceTest
             }
             catch (CustomException)
             {
-                //Fare for multiple ride but give list of rides for a perticular rider(User) and then pass to Calculate fare
+                //Fare for multiple ride gets list of rides for a perticular rider(User) and then pass to Calculate fare
                 Assert.AreEqual("Invalid User ID", fare.CalculateFareForMultipleRide(rideRepository.GetListOfRides("Kaithwas")));
             }
         }
         /// <summary>
-        /// UC5 TC 5.1 Valid Ride type
+        /// UC 5 TC 5.1 Valid Ride type
         /// </summary>
         [Test]
         public void GivenValidRideType_GenerateCabInvoice()
@@ -224,11 +225,11 @@ namespace CabInvoiceTest
             rideRepository.AddRide("Sankalp", rideTwo);
             rideRepository.AddRide("Sankalp", rideThree);
 
-            //Fare for multiple ride but give list of rides for a perticular rider(User) and then pass to Calculate fare
+            //Fare for multiple ride gets list of rides for a perticular rider(User) and then pass to Calculate fare
             Assert.AreEqual(335, fare.CalculateFareForMultipleRide(rideRepository.GetListOfRides("Sankalp")));
         }
         /// <summary>
-        /// TC5.1 Invalid ride type
+        /// TC 5.2 Invalid ride type
         /// </summary>
         [Test]
         public void GivenInValidRideType_GenerateCabInvoice()
